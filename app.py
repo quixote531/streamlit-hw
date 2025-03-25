@@ -154,31 +154,6 @@ def report():
     fig = px.bar(x=features.values, y=features.index, orientation='h', labels={'x': 'Importance', 'y': 'Features'}, title="Feature Importance")
     st.plotly_chart(fig)
 
-    st.subheader("비만 등급 예측")
-    age = st.number_input("나이", 10, 100, 25)
-    height = st.number_input("키 (cm)", 100, 250, 170)
-    weight = st.number_input("몸무게 (kg)", 30, 200, 70)
-    gender = st.selectbox("성별", label_encoders["Gender"].classes_)
-
-    if st.button("예측 실행"):
-        bmi = weight / ((height / 100) ** 2)
-
-        input_data = pd.DataFrame({
-            "Age": [age],
-            "Gender": label_encoders["Gender"].transform([gender]),
-            "Height": [height],
-            "Weight": [weight],
-            "BMI": [bmi]
-        })
-
-        for col in X.columns:
-            if col not in input_data.columns:
-                input_data[col] = 0
-
-        input_scaled = scaler.transform(input_data[X.columns])
-        prediction = model.predict(input_scaled)
-        result_label = target_encoder.inverse_transform(prediction)[0]
-        st.success(f"예측된 비만 등급: **{result_label}**")
 
 
 if menu == "Home":
